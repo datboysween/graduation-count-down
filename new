@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graduation Countdown | Classes of 2027 – 2050 & Milestones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f4f6fa;
+      --bg-card: #ffffff;
+      --bg-card-pinned: #fffdf5;
+      --bg-card-milestone: #f8fafc;
+      --bg-sub: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-card: #e2e8f0;
+      --navy-primary: #0f2547;
+      --gold-accent: #d97706;
+      --gold-bright: #f59e0b;
+    }
+
+    .dark {
+      --bg-page: #08101e;
+      --bg-card: #0f1c32;
+      --bg-card-pinned: #182338;
+      --bg-card-milestone: #13223d;
+      --bg-sub: #162642;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-card: #1e3356;
+      --navy-primary: #060d19;
+      --gold-accent: #f59e0b;
+      --gold-bright: #fbbf24;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .font-serif-display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .grad-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-card);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .grad-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -8px rgba(15, 37, 71, 0.14);
+    }
+
+    .grad-card.pinned {
+      background-color: var(--bg-card-pinned);
+      border: 2px solid var(--gold-bright);
+      box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.18);
+    }
+
+    .grad-card.milestone-card {
+      background-color: var(--bg-card-milestone);
+      border-top: 4px solid #3b82f6;
+    }
+
+    .grad-card.milestone-card.pinned {
+      border: 2px solid var(--gold-bright);
+      border-top: 4px solid var(--gold-bright);
+    }
+
+    .time-box {
+      background-color: var(--bg-sub);
+    }
+
+    .modal-backdrop {
+      background-color: rgba(6, 13, 25, 0.72);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Academic Header -->
+  <header class="bg-[#0f2547] text-white border-b-4 border-amber-500 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <button id="open-grad-date-modal"
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-semibold tracking-wider uppercase transition cursor-pointer"
+              title="Click to customize default graduation date">
+              <span>🎓</span>
+              <span id="header-target-label">Default Date: June 1st • 12:00 AM</span>
+              <svg class="w-3.5 h-3.5 opacity-85" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </button>
+          </div>
+          <h1 class="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+            Graduation Countdown
+          </h1>
+          <p class="mt-2 text-slate-300 text-sm sm:text-base max-w-2xl">
+            Live countdowns for the <span class="text-amber-300 font-semibold">Classes of 2027 – 2050</span> plus custom school milestones like Grad Parties, Homecoming & Prom.
+          </p>
+        </div>
+
+        <!-- Action Buttons, Live Clock & Theme Toggle -->
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+          <button id="btn-change-grad-date"
+            class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#17335e] hover:bg-[#1f4277] border border-slate-500/50 text-white text-xs sm:text-sm font-semibold transition cursor-pointer">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Graduation Date
+          </button>
+
+          <button id="btn-add-milestone"
+            class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold shadow transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Milestone
+          </button>
+
+          <div class="bg-[#17335e] border border-slate-600/50 rounded-xl px-3.5 py-2 text-right hidden sm:block">
+            <div class="text-[10px] uppercase tracking-wider text-amber-300 font-semibold">Local Time</div>
+            <div id="live-clock" class="text-sm font-bold tabular-nums text-white">--:--:--</div>
+          </div>
+
+          <button id="theme-toggle" aria-label="Toggle Dark Mode"
+            class="p-2.5 rounded-xl bg-[#17335e] hover:bg-[#1f4277] border border-slate-600/50 text-amber-300 transition cursor-pointer"
+            title="Toggle Light / Dark Theme">
+            <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5"></circle>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+            </svg>
+            <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="mt-7 pt-5 border-t border-white/15 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div class="relative flex-1 max-w-md">
+          <span class="absolute inset-y-0 left-3.5 flex items-center text-slate-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </span>
+          <input id="search-input" type="text" placeholder="Search year or event (e.g., 2027, Prom, Hoco)..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#17335e] border border-slate-500/40 text-white placeholder-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="filter-all"
+            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-500 text-slate-950 shadow transition cursor-pointer">
+            All (<span id="all-count">24</span>)
+          </button>
+          <button id="filter-pinned"
+            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#17335e] text-slate-200 hover:bg-[#1f4277] transition cursor-pointer">
+            ★ Pinned (<span id="pinned-count">0</span>)
+          </button>
+          <button id="filter-milestones"
+            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#17335e] text-slate-200 hover:bg-[#1f4277] transition cursor-pointer">
+            🎉 Milestones (<span id="milestones-count">0</span>)
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div id="empty-state" class="hidden text-center py-16">
+      <div class="text-4xl mb-3">🎓</div>
+      <h2 class="text-xl font-bold">No matching countdowns found</h2>
+      <p class="text-sm mt-1 opacity-75">Try clearing your search, switching filters, or adding a new milestone event.</p>
+    </div>
+
+    <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <!-- Cards injected by JavaScript -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-300/40 dark:border-slate-800 py-6 text-center text-xs opacity-75 px-4">
+    All custom dates, milestones, and pinned classes are saved automatically in your browser.
+  </footer>
+
+  <!-- MODAL 1: Customize Graduation Date -->
+  <div id="grad-date-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white dark:bg-[#0f1c32] border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-serif-display text-2xl font-bold">Graduation Date Settings</h3>
+        <button id="close-grad-modal" class="p-1.5 rounded-lg opacity-70 hover:opacity-100 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form id="grad-date-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Apply To</label>
+          <select id="grad-scope-select"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="default">All Classes (Default Date)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Month</label>
+            <select id="grad-month-select"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400">
+              <option value="0">January</option>
+              <option value="1">February</option>
+              <option value="2">March</option>
+              <option value="3">April</option>
+              <option value="4">May</option>
+              <option value="5" selected>June</option>
+              <option value="6">July</option>
+              <option value="7">August</option>
+              <option value="8">September</option>
+              <option value="9">October</option>
+              <option value="10">November</option>
+              <option value="11">December</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Day</label>
+            <input id="grad-day-input" type="number" min="1" max="31" value="1" required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Ceremony Time</label>
+          <input id="grad-time-input" type="time" value="00:00" required
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400" />
+        </div>
+
+        <div class="pt-2 flex flex-wrap items-center justify-between gap-2">
+          <button type="button" id="reset-grad-date-btn"
+            class="px-3.5 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer">
+            Reset to June 1st
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" id="cancel-grad-modal"
+              class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:opacity-90 transition cursor-pointer">
+              Cancel
+            </button>
+            <button type="submit"
+              class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow transition cursor-pointer">
+              Save Date
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Add / Edit Important Milestone -->
+  <div id="milestone-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white dark:bg-[#0f1c32] border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="milestone-modal-title" class="font-serif-display text-2xl font-bold">Add Important Date</h3>
+        <button id="close-milestone-modal" class="p-1.5 rounded-lg opacity-70 hover:opacity-100 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Quick Presets -->
+      <div class="mb-4">
+        <div class="text-[11px] font-bold uppercase tracking-wider opacity-70 mb-2">Quick Presets</div>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" class="preset-chip px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-[#162642] hover:bg-amber-500/20 border border-slate-300/60 dark:border-slate-600/60 transition cursor-pointer" data-title="Grad Party 🎉" data-cat="Celebration">🎉 Grad Party</button>
+          <button type="button" class="preset-chip px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-[#162642] hover:bg-amber-500/20 border border-slate-300/60 dark:border-slate-600/60 transition cursor-pointer" data-title="Homecoming (Hoco) 🏈" data-cat="School Event">🏈 Hoco</button>
+          <button type="button" class="preset-chip px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-[#162642] hover:bg-amber-500/20 border border-slate-300/60 dark:border-slate-600/60 transition cursor-pointer" data-title="Senior Prom ✨" data-cat="School Event">✨ Prom</button>
+          <button type="button" class="preset-chip px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-[#162642] hover:bg-amber-500/20 border border-slate-300/60 dark:border-slate-600/60 transition cursor-pointer" data-title="Senior Skip Day 😎" data-cat="Tradition">😎 Senior Skip Day</button>
+          <button type="button" class="preset-chip px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-[#162642] hover:bg-amber-500/20 border border-slate-300/60 dark:border-slate-600/60 transition cursor-pointer" data-title="College Decision Day 🏛️" data-cat="Academic">🏛️ Decision Day</button>
+        </div>
+      </div>
+
+      <form id="milestone-form" class="space-y-4">
+        <input type="hidden" id="milestone-edit-id" value="" />
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Event Name</label>
+          <input id="milestone-title-input" type="text" placeholder="e.g., Grad Party, Hoco 2027, Senior Prom" required
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Event Date</label>
+            <input id="milestone-date-input" type="date" required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Start Time</label>
+            <input id="milestone-time-input" type="time" value="18:00" required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider opacity-75 mb-1.5">Category / Class Tag (Optional)</label>
+          <input id="milestone-tag-input" type="text" placeholder="e.g., Class of 2027, School Event, Party"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-[#162642] border border-slate-300 dark:border-slate-600 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400" />
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" id="cancel-milestone-modal"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-700 hover:opacity-90 transition cursor-pointer">
+            Cancel
+          </button>
+          <button type="submit"
+            class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow transition cursor-pointer">
+            Save Milestone
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const START_YEAR = 2027;
+    const END_YEAR = 2050;
+    const MONTH_NAMES = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Storage Keys
+    const KEY_PINNED_CLASSES = 'grad_countdown_pinned_years';
+    const KEY_PINNED_MILESTONES = 'grad_countdown_pinned_milestones';
+    const KEY_THEME = 'grad_countdown_theme';
+    const KEY_DEFAULT_GRAD = 'grad_countdown_default_date';
+    const KEY_CUSTOM_YEAR_DATES = 'grad_countdown_custom_year_dates';
+    const KEY_MILESTONES = 'grad_countdown_milestones_list';
+
+    // State
+    let pinnedYears = new Set(JSON.parse(localStorage.getItem(KEY_PINNED_CLASSES) || '[]'));
+    let pinnedMilestones = new Set(JSON.parse(localStorage.getItem(KEY_PINNED_MILESTONES) || '[]'));
+    let defaultGradConfig = JSON.parse(localStorage.getItem(KEY_DEFAULT_GRAD) || '{"month":5,"day":1,"hour":0,"minute":0}');
+    let customYearDates = JSON.parse(localStorage.getItem(KEY_CUSTOM_YEAR_DATES) || '{}');
+    let milestones = JSON.parse(localStorage.getItem(KEY_MILESTONES) || '[]');
+
+    let filterMode = 'all'; // 'all' | 'pinned' | 'milestones'
+    let searchQuery = '';
+
+    // DOM Elements
+    const gridEl = document.getElementById('cards-grid');
+    const emptyStateEl = document.getElementById('empty-state');
+    const allCountEl = document.getElementById('all-count');
+    const pinnedCountEl = document.getElementById('pinned-count');
+    const milestonesCountEl = document.getElementById('milestones-count');
+    const searchInput = document.getElementById('search-input');
+    const filterAllBtn = document.getElementById('filter-all');
+    const filterPinnedBtn = document.getElementById('filter-pinned');
+    const filterMilestonesBtn = document.getElementById('filter-milestones');
+    const liveClockEl = document.getElementById('live-clock');
+    const headerTargetLabel = document.getElementById('header-target-label');
+
+    // Theme Setup
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const iconSun = document.getElementById('icon-sun');
+    const iconMoon = document.getElementById('icon-moon');
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        iconSun.classList.remove('hidden');
+        iconMoon.classList.add('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        iconSun.classList.add('hidden');
+        iconMoon.classList.remove('hidden');
+      }
+    }
+    applyTheme(localStorage.getItem(KEY_THEME) || 'light');
+
+    themeToggleBtn.addEventListener('click', () => {
+      const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem(KEY_THEME, next);
+      applyTheme(next);
+    });
+
+    // Formatting Helpers
+    function getOrdinalSuffix(n) {
+      const s = ['th', 'st', 'nd', 'rd'];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    function formatTime12(hour, minute) {
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const h12 = hour % 12 === 0 ? 12 : hour % 12;
+      return `${h12}:${String(minute).padStart(2, '0')} ${ampm}`;
+    }
+
+    function getGradConfigForYear(year) {
+      return customYearDates[year] || defaultGradConfig;
+    }
+
+    function getGradTargetDate(year) {
+      const cfg = getGradConfigForYear(year);
+      return new Date(year, cfg.month, cfg.day, cfg.hour, cfg.minute, 0);
+    }
+
+    function updateHeaderTargetBanner() {
+      const d = defaultGradConfig;
+      headerTargetLabel.textContent = `Default Date: ${MONTH_NAMES[d.month]} ${getOrdinalSuffix(d.day)} • ${formatTime12(d.hour, d.minute)}`;
+    }
+
+    // Populate Year Scope Dropdown in Modal
+    const gradScopeSelect = document.getElementById('grad-scope-select');
+    for (let y = START_YEAR; y <= END_YEAR; y++) {
+      const opt = document.createElement('option');
+      opt.value = String(y);
+      opt.textContent = `Class of ${y} Only`;
+      gradScopeSelect.appendChild(opt);
+    }
+
+    // Modal 1: Graduation Date Settings
+    const gradDateModal = document.getElementById('grad-date-modal');
+    const gradMonthSelect = document.getElementById('grad-month-select');
+    const gradDayInput = document.getElementById('grad-day-input');
+    const gradTimeInput = document.getElementById('grad-time-input');
+
+    function openGradModal(scope = 'default') {
+      gradScopeSelect.value = String(scope);
+      const cfg = scope === 'default' ? defaultGradConfig : getGradConfigForYear(Number(scope));
+      gradMonthSelect.value = String(cfg.month);
+      gradDayInput.value = String(cfg.day);
+      gradTimeInput.value = `${String(cfg.hour).padStart(2, '0')}:${String(cfg.minute).padStart(2, '0')}`;
+      gradDateModal.classList.remove('hidden');
+      gradDateModal.classList.add('flex');
+    }
+
+    function closeGradModal() {
+      gradDateModal.classList.add('hidden');
+      gradDateModal.classList.remove('flex');
+    }
+
+    gradScopeSelect.addEventListener('change', () => {
+      const val = gradScopeSelect.value;
+      const cfg = val === 'default' ? defaultGradConfig : getGradConfigForYear(Number(val));
+      gradMonthSelect.value = String(cfg.month);
+      gradDayInput.value = String(cfg.day);
+      gradTimeInput.value = `${String(cfg.hour).padStart(2, '0')}:${String(cfg.minute).padStart(2, '0')}`;
+    });
+
+    document.getElementById('open-grad-date-modal').addEventListener('click', () => openGradModal('default'));
+    document.getElementById('btn-change-grad-date').addEventListener('click', () => openGradModal('default'));
+    document.getElementById('close-grad-modal').addEventListener('click', closeGradModal);
+    document.getElementById('cancel-grad-modal').addEventListener('click', closeGradModal);
+
+    document.getElementById('grad-date-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const scope = gradScopeSelect.value;
+      const month = parseInt(gradMonthSelect.value, 10);
+      const day = Math.min(31, Math.max(1, parseInt(gradDayInput.value, 10) || 1));
+      const [hStr, mStr] = (gradTimeInput.value || '00:00').split(':');
+      const cfg = {
+        month,
+        day,
+        hour: parseInt(hStr, 10) || 0,
+        minute: parseInt(mStr, 10) || 0
+      };
+
+      if (scope === 'default') {
+        defaultGradConfig = cfg;
+        localStorage.setItem(KEY_DEFAULT_GRAD, JSON.stringify(defaultGradConfig));
+      } else {
+        customYearDates[scope] = cfg;
+        localStorage.setItem(KEY_CUSTOM_YEAR_DATES, JSON.stringify(customYearDates));
+      }
+
+      updateHeaderTargetBanner();
+      closeGradModal();
+      renderCards();
+    });
+
+    document.getElementById('reset-grad-date-btn').addEventListener('click', () => {
+      const scope = gradScopeSelect.value;
+      if (scope === 'default') {
+        defaultGradConfig = { month: 5, day: 1, hour: 0, minute: 0 };
+        customYearDates = {};
+        localStorage.setItem(KEY_DEFAULT_GRAD, JSON.stringify(defaultGradConfig));
+        localStorage.setItem(KEY_CUSTOM_YEAR_DATES, JSON.stringify(customYearDates));
+      } else {
+        delete customYearDates[scope];
+        localStorage.setItem(KEY_CUSTOM_YEAR_DATES, JSON.stringify(customYearDates));
+      }
+      updateHeaderTargetBanner();
+      closeGradModal();
+      renderCards();
+    });
+
+    // Modal 2: Milestones (Grad Party, Hoco, Prom, etc.)
+    const milestoneModal = document.getElementById('milestone-modal');
+    const milestoneModalTitle = document.getElementById('milestone-modal-title');
+    const milestoneEditId = document.getElementById('milestone-edit-id');
+    const milestoneTitleInput = document.getElementById('milestone-title-input');
+    const milestoneDateInput = document.getElementById('milestone-date-input');
+    const milestoneTimeInput = document.getElementById('milestone-time-input');
+    const milestoneTagInput = document.getElementById('milestone-tag-input');
+
+    function openMilestoneModal(editItem = null) {
+      if (editItem) {
+        milestoneModalTitle.textContent = 'Edit Important Date';
+        milestoneEditId.value = editItem.id;
+        milestoneTitleInput.value = editItem.title;
+        milestoneDateInput.value = editItem.date;
+        milestoneTimeInput.value = editItem.time || '18:00';
+        milestoneTagInput.value = editItem.tag || '';
+      } else {
+        milestoneModalTitle.textContent = 'Add Important Date';
+        milestoneEditId.value = '';
+        milestoneTitleInput.value = '';
+        const tomorrow = new Date(Date.now() + 86400000);
+        milestoneDateInput.value = tomorrow.toISOString().split('T')[0];
+        milestoneTimeInput.value = '18:00';
+        milestoneTagInput.value = '';
+      }
+      milestoneModal.classList.remove('hidden');
+      milestoneModal.classList.add('flex');
+    }
+
+    function closeMilestoneModal() {
+      milestoneModal.classList.add('hidden');
+      milestoneModal.classList.remove('flex');
+    }
+
+    document.getElementById('btn-add-milestone').addEventListener('click', () => openMilestoneModal());
+    document.getElementById('close-milestone-modal').addEventListener('click', closeMilestoneModal);
+    document.getElementById('cancel-milestone-modal').addEventListener('click', closeMilestoneModal);
+
+    document.querySelectorAll('.preset-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        milestoneTitleInput.value = btn.dataset.title;
+        if (!milestoneTagInput.value) {
+          milestoneTagInput.value = btn.dataset.cat;
+        }
+      });
+    });
+
+    document.getElementById('milestone-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = milestoneEditId.value || 'ms_' + Date.now();
+      const item = {
+        id,
+        title: milestoneTitleInput.value.trim(),
+        date: milestoneDateInput.value,
+        time: milestoneTimeInput.value || '00:00',
+        tag: milestoneTagInput.value.trim() || 'Milestone'
+      };
+
+      const existingIdx = milestones.findIndex(m => m.id === id);
+      if (existingIdx >= 0) {
+        milestones[existingIdx] = item;
+      } else {
+        milestones.unshift(item);
+        pinnedMilestones.add(id); // Auto-pin newly created milestones so they stand out
+        localStorage.setItem(KEY_PINNED_MILESTONES, JSON.stringify([...pinnedMilestones]));
+      }
+
+      localStorage.setItem(KEY_MILESTONES, JSON.stringify(milestones));
+      closeMilestoneModal();
+      renderCards();
+    });
+
+    function deleteMilestone(id) {
+      milestones = milestones.filter(m => m.id !== id);
+      pinnedMilestones.delete(id);
+      localStorage.setItem(KEY_MILESTONES, JSON.stringify(milestones));
+      localStorage.setItem(KEY_PINNED_MILESTONES, JSON.stringify([...pinnedMilestones]));
+      renderCards();
+    }
+
+    function editMilestoneById(id) {
+      const item = milestones.find(m => m.id === id);
+      if (item) openMilestoneModal(item);
+    }
+
+    function togglePinClass(year) {
+      if (pinnedYears.has(year)) {
+        pinnedYears.delete(year);
+      } else {
+        pinnedYears.add(year);
+      }
+      localStorage.setItem(KEY_PINNED_CLASSES, JSON.stringify([...pinnedYears]));
+      renderCards();
+    }
+
+    function togglePinMilestone(id) {
+      if (pinnedMilestones.has(id)) {
+        pinnedMilestones.delete(id);
+      } else {
+        pinnedMilestones.add(id);
+      }
+      localStorage.setItem(KEY_PINNED_MILESTONES, JSON.stringify([...pinnedMilestones]));
+      renderCards();
+    }
+
+    // Grade Level & K-12 Progress Helpers
+    function getGradeLabel(gradYear, now) {
+      const currentSchoolEndYear = now.getMonth() >= 6 ? now.getFullYear() + 1 : now.getFullYear();
+      const yearsUntilGrad = gradYear - currentSchoolEndYear;
+      const gradeNum = 12 - yearsUntilGrad;
+
+      if (yearsUntilGrad < 0) return 'Alumni';
+      if (gradeNum === 12) return '12th Grade • Senior';
+      if (gradeNum === 11) return '11th Grade • Junior';
+      if (gradeNum === 10) return '10th Grade • Sophomore';
+      if (gradeNum === 9) return '9th Grade • Freshman';
+      if (gradeNum >= 6 && gradeNum <= 8) return `${gradeNum}th Grade • Middle School`;
+      if (gradeNum >= 1 && gradeNum <= 5) {
+        return `${getOrdinalSuffix(gradeNum)} Grade • Elementary`;
+      }
+      if (gradeNum === 0) return 'Kindergarten';
+      const yearsBeforeK = Math.abs(gradeNum);
+      return yearsBeforeK === 1 ? 'Pre-K (1 yr to K)' : `Future Scholar (${yearsBeforeK} yrs to K)`;
+    }
+
+    function getK12Progress(gradYear, now) {
+      const kStart = new Date(gradYear - 13, 7, 15, 0, 0, 0);
+      const gradDate = getGradTargetDate(gradYear);
+      if (now >= gradDate) return 100;
+      if (now <= kStart) return 0;
+      const pct = ((now - kStart) / (gradDate - kStart)) * 100;
+      return Math.min(100, Math.max(0, pct));
+    }
+
+    function getFilteredItems() {
+      const q = searchQuery.trim().toLowerCase();
+
+      // Milestones
+      const filteredMilestones = milestones
+        .filter(m => {
+          if (filterMode === 'pinned' && !pinnedMilestones.has(m.id)) return false;
+          if (q && !m.title.toLowerCase().includes(q) && !m.tag.toLowerCase().includes(q) && !m.date.includes(q)) {
+            return false;
+          }
+          return true;
+        })
+        .sort((a, b) => {
+          const aPin = pinnedMilestones.has(a.id) ? 0 : 1;
+          const bPin = pinnedMilestones.has(b.id) ? 0 : 1;
+          if (aPin !== bPin) return aPin - bPin;
+          return new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`);
+        });
+
+      // Class Years
+      let filteredYears = [];
+      if (filterMode !== 'milestones') {
+        for (let y = START_YEAR; y <= END_YEAR; y++) {
+          if (filterMode === 'pinned' && !pinnedYears.has(y)) continue;
+          if (q && !String(y).includes(q) && !`class of ${y}`.includes(q)) continue;
+          filteredYears.push(y);
+        }
+        filteredYears.sort((a, b) => {
+          const aPin = pinnedYears.has(a) ? 0 : 1;
+          const bPin = pinnedYears.has(b) ? 0 : 1;
+          if (aPin !== bPin) return aPin - bPin;
+          return a - b;
+        });
+      }
+
+      return { filteredMilestones, filteredYears };
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderCards() {
+      const { filteredMilestones, filteredYears } = getFilteredItems();
+
+      // Update Tab Counts
+      allCountEl.textContent = (END_YEAR - START_YEAR + 1) + milestones.length;
+      pinnedCountEl.textContent = pinnedYears.size + pinnedMilestones.size;
+      milestonesCountEl.textContent = milestones.length;
+
+      if (filteredMilestones.length === 0 && filteredYears.length === 0) {
+        gridEl.innerHTML = '';
+        emptyStateEl.classList.remove('hidden');
+        return;
+      }
+
+      emptyStateEl.classList.add('hidden');
+      const now = new Date();
+
+      const milestoneCardsHtml = filteredMilestones.map(m => {
+        const isPinned = pinnedMilestones.has(m.id);
+        const [y, mo, d] = m.date.split('-').map(Number);
+        const [hr, mi] = (m.time || '00:00').split(':').map(Number);
+        const formattedDate = `${SHORT_MONTHS[mo - 1]} ${d}, ${y} • ${formatTime12(hr, mi)}`;
+
+        return `
+          <article id="card-${m.id}" class="grad-card milestone-card ${isPinned ? 'pinned' : ''} rounded-2xl p-5 flex flex-col justify-between relative">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    ${escapeHtml(m.tag)}
+                  </span>
+                  ${isPinned ? '<span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300">Pinned</span>' : ''}
+                </div>
+                <h2 class="font-serif-display text-2xl font-extrabold tracking-tight mt-0.5 truncate" title="${escapeHtml(m.title)}">
+                  ${escapeHtml(m.title)}
+                </h2>
+              </div>
+
+              <button onclick="togglePinMilestone('${m.id}')"
+                title="${isPinned ? 'Unpin Event' : 'Pin Event to Top'}"
+                class="p-2 rounded-xl shrink-0 transition cursor-pointer ${isPinned ? 'text-amber-500 bg-amber-500/15' : 'text-slate-400 hover:text-amber-500 hover:bg-slate-500/10'}">
+                <svg class="w-5 h-5" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </button>
+            </div>
+
+            <div class="mt-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-700 dark:text-blue-300">
+                📅 ${formattedDate}
+              </span>
+            </div>
+
+            <div id="timer-${m.id}" class="my-1"></div>
+
+            <div class="mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-700/70 flex items-center justify-between text-xs">
+              <button onclick="editMilestoneById('${m.id}')" class="font-semibold text-slate-600 dark:text-slate-300 hover:text-amber-500 transition cursor-pointer">
+                ✏️ Edit
+              </button>
+              <button onclick="deleteMilestone('${m.id}')" class="font-semibold text-rose-600 dark:text-rose-400 hover:underline transition cursor-pointer">
+                Delete
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      const classCardsHtml = filteredYears.map(year => {
+        const isPinned = pinnedYears.has(year);
+        const gradeLabel = getGradeLabel(year, now);
+        const progress = getK12Progress(year, now).toFixed(1);
+        const cfg = getGradConfigForYear(year);
+        const isCustomDate = Boolean(customYearDates[year]);
+        const targetLabel = `${SHORT_MONTHS[cfg.month]} ${cfg.day}, ${year}`;
+
+        return `
+          <article id="card-${year}" class="grad-card ${isPinned ? 'pinned' : ''} rounded-2xl p-5 flex flex-col justify-between relative">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                    Class of
+                  </span>
+                  ${isPinned ? '<span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300">Pinned</span>' : ''}
+                </div>
+                <h2 class="font-serif-display text-3xl font-extrabold tracking-tight mt-0.5">
+                  ${year}
+                </h2>
+              </div>
+
+              <button onclick="togglePinClass(${year})"
+                title="${isPinned ? 'Unpin Class' : 'Pin Class to Top'}"
+                class="p-2 rounded-xl transition cursor-pointer ${isPinned ? 'text-amber-500 bg-amber-500/15' : 'text-slate-400 hover:text-amber-500 hover:bg-slate-500/10'}">
+                <svg class="w-5 h-5" fill="${isPinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </button>
+            </div>
+
+            <div class="mt-2 mb-4 flex flex-wrap items-center gap-1.5">
+              <span class="inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-slate-500/10 text-slate-600 dark:text-slate-300">
+                ${gradeLabel}
+              </span>
+              <button onclick="openGradModal('${year}')"
+                title="Customize graduation date for Class of ${year}"
+                class="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-md transition cursor-pointer ${isCustomDate ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300' : 'bg-slate-500/10 text-slate-500 dark:text-slate-400 hover:text-amber-500'}">
+                📅 ${targetLabel}
+              </button>
+            </div>
+
+            <div id="timer-${year}" class="my-1"></div>
+
+            <div class="mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-700/70">
+              <div class="flex justify-between text-[11px] font-medium opacity-75 mb-1.5">
+                <span>K–12 Journey</span>
+                <span class="tabular-nums">${progress}%</span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#0f2547] via-blue-700 to-amber-500 transition-all duration-500" style="width: ${progress}%"></div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      gridEl.innerHTML = milestoneCardsHtml + classCardsHtml;
+      updateCountdowns();
+    }
+
+    function renderTimerMarkup(target, now, completedTitle, completedSubtitle) {
+      const diff = target - now;
+      if (diff <= 0) {
+        return `
+          <div class="py-4 px-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border border-amber-400/40 text-center">
+            <div class="text-lg font-extrabold text-amber-600 dark:text-amber-300">${completedTitle}</div>
+            <div class="text-xs opacity-80 mt-0.5">${completedSubtitle}</div>
+          </div>
+        `;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      return `
+        <div class="time-box rounded-xl p-3 text-center mb-2 border border-slate-200/60 dark:border-slate-700/60">
+          <div class="text-3xl sm:text-4xl font-extrabold tabular-nums tracking-tight text-[#0f2547] dark:text-amber-400">
+            ${days.toLocaleString()}
+          </div>
+          <div class="text-[11px] font-bold uppercase tracking-widest opacity-70 mt-0.5">
+            ${days === 1 ? 'Day Remaining' : 'Days Remaining'}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="time-box rounded-lg py-2 px-1">
+            <div class="text-base font-bold tabular-nums">${String(hours).padStart(2, '0')}</div>
+            <div class="text-[10px] uppercase tracking-wider opacity-65 font-semibold">Hrs</div>
+          </div>
+          <div class="time-box rounded-lg py-2 px-1">
+            <div class="text-base font-bold tabular-nums">${String(minutes).padStart(2, '0')}</div>
+            <div class="text-[10px] uppercase tracking-wider opacity-65 font-semibold">Min</div>
+          </div>
+          <div class="time-box rounded-lg py-2 px-1">
+            <div class="text-base font-bold tabular-nums text-amber-600 dark:text-amber-400">${String(seconds).padStart(2, '0')}</div>
+            <div class="text-[10px] uppercase tracking-wider opacity-65 font-semibold">Sec</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateCountdowns() {
+      const now = new Date();
+      liveClockEl.textContent = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+
+      const { filteredMilestones, filteredYears } = getFilteredItems();
+
+      filteredMilestones.forEach(m => {
+        const timerEl = document.getElementById(`timer-${m.id}`);
+        if (!timerEl) return;
+        const [y, mo, d] = m.date.split('-').map(Number);
+        const [hr, mi] = (m.time || '00:00').split(':').map(Number);
+        const target = new Date(y, mo - 1, d, hr, mi, 0);
+        timerEl.innerHTML = renderTimerMarkup(target, now, '🎉 Event Day!', `${escapeHtml(m.title)} is here`);
+      });
+
+      filteredYears.forEach(year => {
+        const timerEl = document.getElementById(`timer-${year}`);
+        if (!timerEl) return;
+        const cfg = getGradConfigForYear(year);
+        const target = getGradTargetDate(year);
+        timerEl.innerHTML = renderTimerMarkup(
+          target,
+          now,
+          '🎓 Graduated!',
+          `${MONTH_NAMES[cfg.month]} ${cfg.day}, ${year} has arrived`
+        );
+      });
+    }
+
+    // Filter & Search Listeners
+    function setActiveFilterButton(mode) {
+      filterMode = mode;
+      const activeClass = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-amber-500 text-slate-950 shadow transition cursor-pointer';
+      const inactiveClass = 'px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-[#17335e] text-slate-200 hover:bg-[#1f4277] transition cursor-pointer';
+
+      filterAllBtn.className = mode === 'all' ? activeClass : inactiveClass;
+      filterPinnedBtn.className = mode === 'pinned' ? activeClass : inactiveClass;
+      filterMilestonesBtn.className = mode === 'milestones' ? activeClass : inactiveClass;
+      renderCards();
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderCards();
+    });
+
+    filterAllBtn.addEventListener('click', () => setActiveFilterButton('all'));
+    filterPinnedBtn.addEventListener('click', () => setActiveFilterButton('pinned'));
+    filterMilestonesBtn.addEventListener('click', () => setActiveFilterButton('milestones'));
+
+    // Initialize
+    updateHeaderTargetBanner();
+    renderCards();
+    setInterval(updateCountdowns, 1000);
+  </script>
+</body>
+</html>
